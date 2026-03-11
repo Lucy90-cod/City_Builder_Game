@@ -43,7 +43,7 @@ export class Edificio {
 
     // ── Metodos abstractos ───────────────────────────────────────────────────
     // Las subclases DEBEN sobreescribir estos tres metodos.
-    // Si no lo hacen y se llaman, lanzaran Error en tiempo de ejecucion.
+    
 
     calcularConsumo() {
         throw new Error(`${this.constructor.name} debe implementar calcularConsumo()`);
