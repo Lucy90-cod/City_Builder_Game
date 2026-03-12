@@ -1,0 +1,101 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+.layout-juego {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    min-height: 100vh;
+}
+
+.sidebar-izquierda,
+.sidebar-derecha {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.sidebar-izquierda {
+    border-right: 1px solid #dcdcdc;
+}
+
+.sidebar-derecha {
+    border-left: 1px solid #dcdcdc;
+}
+
+.zona-mapa {
+    padding: 20px;
+    background-color: #eef2f5;
+}
+
+.datos-ciudad {
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+#panel-recursos {
+    display: grid;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.recurso-card {
+    background-color: #f9fafb;
+    border: 1px solid #d7dde4;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.recurso-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.recurso-card p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.contenedor-mapa {
+    margin-top: 20px;
+    min-height: 500px;
+    border: 2px dashed #b8c2cc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.widget {
+    background-color: #f9fafb;
+    border: 1px solid #d7dde4;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.widget h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+@media (max-width: 1024px) {
+    .layout-juego {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-izquierda,
+    .sidebar-derecha,
+    .zona-mapa {
+        border: none;
+    }
+}

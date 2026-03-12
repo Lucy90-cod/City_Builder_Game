@@ -1,10 +1,12 @@
 import Recurso from "./Recurso.js";
 
 export default class Ciudad {
-    constructor({ nombre, alcalde, region, ancho, alto }) {
+    constructor({ nombre, alcalde, region, latitud, longitud, ancho, alto }) {
         this.nombre = nombre;
         this.alcalde = alcalde;
         this.region = region;
+        this.latitud = latitud;
+        this.longitud = longitud;
         this.ancho = ancho;
         this.alto = alto;
 
@@ -41,6 +43,8 @@ export default class Ciudad {
             nombre: this.nombre,
             alcalde: this.alcalde,
             region: this.region,
+            latitud: this.latitud,
+            longitud: this.longitud,
             ancho: this.ancho,
             alto: this.alto,
             turnoActual: this.turnoActual,
@@ -61,6 +65,8 @@ export default class Ciudad {
             nombre: data.nombre,
             alcalde: data.alcalde,
             region: data.region,
+            latitud: data.latitud,
+            longitud: data.longitud,
             ancho: data.ancho,
             alto: data.alto
         });

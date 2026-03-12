@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de la ciudad</title>
+    <link rel="stylesheet" href="../estilos/juego.css">
+</head>
+<body>
+    <div class="layout-juego">
+        <aside class="sidebar-izquierda">
+            <h1 id="nombre-ciudad">Ciudad</h1>
+            <div id="datos-ciudad" class="datos-ciudad"></div>
+            <section>
+                <h2>Panel de recursos</h2>
+                <div id="panel-recursos"></div>
+            </section>
+        </aside>
+
+        <main class="zona-mapa">
+            <h2>Mapa principal</h2>
+            <div id="contenedor-mapa" class="contenedor-mapa">
+                <p>Aquí se mostrará el mapa de la ciudad.</p>
+            </div>
+        </main>
+
+        <aside class="sidebar-derecha">
+            <section class="widget">
+                <h2>Clima</h2>
+                <div id="widget-clima">
+                    <p>Próximamente.</p>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h2>Noticias</h2>
+                <div id="widget-noticias">
+                    <p>Próximamente.</p>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <script type="module" src="./juego.js"></script>
+</body>
+</html>

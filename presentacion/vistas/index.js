@@ -10,11 +10,13 @@ if (formulario) {
         event.preventDefault();
 
         const datosFormulario = {
-            nombre: document.getElementById("nombreCiudad").value,
-            alcalde: document.getElementById("nombreAlcalde").value,
-            region: document.getElementById("region").value,
-            ancho: document.getElementById("anchoMapa").value,
-            alto: document.getElementById("altoMapa").value
+            nombre: document.getElementById("nombreCiudad").value.trim(),
+            alcalde: document.getElementById("nombreAlcalde").value.trim(),
+            region: document.getElementById("region").value.trim(),
+            latitud: parseFloat(document.getElementById("latitud").value),
+            longitud: parseFloat(document.getElementById("longitud").value),
+            ancho: parseInt(document.getElementById("anchoMapa").value),
+            alto: parseInt(document.getElementById("altoMapa").value)
         };
 
         try {
@@ -24,9 +26,15 @@ if (formulario) {
             mensaje.style.color = "green";
 
             console.log("Ciudad creada:", ciudad);
+
+            setTimeout(() => {
+                window.location.href = "/presentacion/vistas/juego.html";
+            }, 1000);
+
         } catch (error) {
             mensaje.textContent = error.message;
             mensaje.style.color = "red";
         }
     });
 }
+

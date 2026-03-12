@@ -13,6 +13,8 @@ export default class ControladorCiudad {
             nombre: datosFormulario.nombre,
             alcalde: datosFormulario.alcalde,
             region: datosFormulario.region,
+            latitud: Number(datosFormulario.latitud),
+            longitud: Number(datosFormulario.longitud),
             ancho: Number(datosFormulario.ancho),
             alto: Number(datosFormulario.alto)
         });
@@ -36,8 +38,26 @@ export default class ControladorCiudad {
             throw new Error("La región es obligatoria");
         }
 
+        const latitud = Number(datos.latitud);
+        const longitud = Number(datos.longitud);
         const ancho = Number(datos.ancho);
         const alto = Number(datos.alto);
+
+        if (isNaN(latitud)) {
+            throw new Error("La latitud debe ser numérica");
+        }
+
+        if (isNaN(longitud)) {
+            throw new Error("La longitud debe ser numérica");
+        }
+
+        if (latitud < -90 || latitud > 90) {
+            throw new Error("La latitud debe estar entre -90 y 90");
+        }
+
+        if (longitud < -180 || longitud > 180) {
+            throw new Error("La longitud debe estar entre -180 y 180");
+        }
 
         if (isNaN(ancho) || isNaN(alto)) {
             throw new Error("El tamaño del mapa debe ser numérico");
