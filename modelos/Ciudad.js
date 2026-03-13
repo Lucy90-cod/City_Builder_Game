@@ -13,6 +13,8 @@ export default class Ciudad {
         this.turnoActual = 0;
         this.poblacion = 0;
         this.puntuacion = 0;
+        this.felicidadPromedio = 0;
+
 
         this.recursos = {
             dinero: new Recurso("Dinero", 50000, "$"),
@@ -49,6 +51,7 @@ export default class Ciudad {
             alto: this.alto,
             turnoActual: this.turnoActual,
             poblacion: this.poblacion,
+            felicidadPromedio: this.felicidadPromedio,
             puntuacion: this.puntuacion,
             recursos: {
                 dinero: this.recursos.dinero.toJSON(),
@@ -74,6 +77,7 @@ export default class Ciudad {
         ciudad.turnoActual = data.turnoActual;
         ciudad.poblacion = data.poblacion;
         ciudad.puntuacion = data.puntuacion;
+        ciudad.felicidadPromedio = data.felicidadPromedio ?? 0;
         ciudad.recursos.dinero = Recurso.fromJSON(data.recursos.dinero);
         ciudad.recursos.electricidad = Recurso.fromJSON(data.recursos.electricidad);
         ciudad.recursos.agua = Recurso.fromJSON(data.recursos.agua);

@@ -1,8 +1,15 @@
 import CiudadStorage from "../../acceso_datos/CiudadStorage.js";
+import ControladorTurno from "../../negocio/ControladorTurno.js";
 import { renderizarPanelRecursos } from "./panelRecursos.js";
 import renderWidgetClima from "./widgetClima.js";
 
 function inicializarVistaJuego() {
+
+    const controladorTurno = new ControladorTurno((ciudadActualizada) => {
+    renderizarPanelRecursos(ciudadActualizada);
+    });
+    controladorTurno.iniciar();
+    
     const ciudad = CiudadStorage.cargar();
 
     if (!ciudad) {
