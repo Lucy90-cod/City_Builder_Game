@@ -1,4 +1,4 @@
-import CiudadStorage from "../../acceso_datos/CiudadStorage.js";
+import CiudadStorage from "../acceso_datos/CiudadStorage.js";
 import { renderizarPanelRecursos } from "./panelRecursos.js";
 import renderWidgetClima from "./widgetClima.js";
 

@@ -1,4 +1,4 @@
-import ControladorCiudad from "../../negocio/ControladorCiudad.js";
+import ControladorCiudad from "../negocio/ControladorCiudad.js";
 
 const formulario = document.getElementById("formCrearCiudad");
 const mensaje = document.getElementById("mensaje");
@@ -28,7 +28,7 @@ if (formulario) {
             console.log("Ciudad creada:", ciudad);
 
             setTimeout(() => {
-                window.location.href = "/presentacion/vistas/juego.html";
+                window.location.href = "./presentacion/vistas/juego.html";
             }, 1000);
 
         } catch (error) {
