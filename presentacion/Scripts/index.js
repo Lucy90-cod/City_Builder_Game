@@ -1,4 +1,4 @@
-import ControladorCiudad from "../negocio/ControladorCiudad.js";
+import ControladorCiudad from "../../negocio/ControladorCiudad.js";
 
 const formulario = document.getElementById("formCrearCiudad");
 const mensaje = document.getElementById("mensaje");
