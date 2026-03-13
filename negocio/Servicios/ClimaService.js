@@ -12,7 +12,7 @@
 export class ClimaService {
 
     static #BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
-    static #API_KEY  = '';   // Se asigna con ClimaService.setApiKey()
+    static #API_KEY  = '1faac14b0abf89760a76cad417149e85';   // Se asigna con ClimaService.setApiKey()
 
     static setApiKey(key) {
         ClimaService.#API_KEY = key;
@@ -24,7 +24,7 @@ export class ClimaService {
      * @param {number} lon
      * @returns {Promise<Object>} Objeto formateado con los datos del clima
      */
-    static async getClima(lat, lon) {
+   static async getClima(lat, lon) {
         if (!ClimaService.#API_KEY) {
             console.warn('ClimaService: falta API_KEY. Llama ClimaService.setApiKey(key) primero.');
             return ClimaService.#climaFallback();

@@ -24,7 +24,7 @@ export class NoticiasService {
      */
     static async getNoticias(countryCode = 'co') {
         if (!NoticiasService.#API_KEY) {
-            console.warn('NoticiasService: falta API_KEY.');
+            console.warn('NoticiasService: falta PI KEY');
             return NoticiasService.#noticiasFallback();
         }
 
