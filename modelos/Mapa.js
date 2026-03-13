@@ -5,8 +5,7 @@
 import { Celda } from './Celda.js';
 import { Vias  } from './Vias.js';
 
-// Tabla de conversion de codigos .txt → tipo de edificio
-// Usada al cargar mapa desde archivo de texto (HU-002)
+// Tabla de conversion de codigos .txt → tipo de edificio Usada al cargar mapa desde archivo de texto (HU-002)
 const CODIGOS_EDIFICIO = {
     R1: { tipo: 'residencial', subtipo: 'casa'            },
     R2: { tipo: 'residencial', subtipo: 'apartamento'     },
