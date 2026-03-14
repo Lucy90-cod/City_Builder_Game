@@ -7,20 +7,20 @@ import renderWidgetClima from "./widgetClima.js";
 import { renderWidgetNoticias } from "./widgetNoticias.js";
 import { MapaRenderer } from "./MapaRender.js";
 
-// ── Estado global ─────────────────────────────────────────────────
-let mapaRenderer        = null;
-let controladorCiudad   = null;
-let controladorTurno    = null;
-let controladorJugador  = null;
-let modoActual          = null;
-let intervaloGuardado   = null;
+// ── Estado global ─────────────────────────────────────────────
+let mapaRenderer       = null;
+let controladorCiudad  = null;
+let controladorTurno   = null;
+let controladorJugador = null;
+let modoActual         = null;
+let intervaloGuardado  = null;
 
-// ── Renderizar datos generales de la ciudad ───────────────────────
+// ── Renderizar datos generales ────────────────────────────────
 function renderizarDatosCiudad(ciudad) {
     const nombreCiudad = document.getElementById("nombre-ciudad");
     const datosCiudad  = document.getElementById("datos-ciudad");
 
-    if (nombreCiudad) nombreCiudad.textContent = ciudad.nombre;
+    if (nombreCiudad) nombreCiudad.textContent = `🏙️ ${ciudad.nombre}`;
 
     if (datosCiudad) {
         datosCiudad.innerHTML = `
@@ -33,7 +33,7 @@ function renderizarDatosCiudad(ciudad) {
     }
 }
 
-// ── Renderizar mapa ───────────────────────────────────────────────
+// ── Renderizar mapa ───────────────────────────────────────────
 function renderizarMapa(ciudad) {
     const areaMapa = document.getElementById("contenedor-mapa");
     if (!areaMapa) return;
@@ -62,14 +62,14 @@ function renderizarMapa(ciudad) {
     mapaRenderer.renderizar();
 }
 
-// ── Refrescar toda la vista ───────────────────────────────────────
+// ── Refrescar toda la vista ───────────────────────────────────
 function refrescarVista(ciudad) {
     renderizarDatosCiudad(ciudad);
     renderizarPanelRecursos(ciudad);
     renderizarMapa(ciudad);
 }
 
-// ── Manejo de clicks en el mapa ───────────────────────────────────
+// ── Clicks en el mapa ─────────────────────────────────────────
 function limpiarSeleccionCelda() {
     document.querySelectorAll("#mapa-grid .celda.seleccionada")
         .forEach(el => el.classList.remove("seleccionada"));
@@ -102,7 +102,7 @@ function manejarClickMapa(x, y) {
     }
 }
 
-// ── Botones de construcción ───────────────────────────────────────
+// ── Botones de construcción ───────────────────────────────────
 function configurarBotonesConstruccion() {
     const configuraciones = [
         { id: "btn-via",              modo: "via" },
@@ -126,18 +126,16 @@ function configurarBotonesConstruccion() {
         boton.addEventListener("click", () => {
             modoActual = modo;
             marcarBotonActivo(id);
-            mostrarNotificacion(`Modo: ${modo}`, "info");
+            mostrarNotificacion(`🏗️ Modo: ${modo}`, "info");
         });
     });
 
-    const btnCancelar = document.getElementById("btn-cancelar-construccion");
-    if (btnCancelar) {
-        btnCancelar.addEventListener("click", () => {
+    document.getElementById("btn-cancelar-construccion")
+        ?.addEventListener("click", () => {
             modoActual = null;
             limpiarBotonesActivos();
             mostrarNotificacion("Modo cancelado", "info");
         });
-    }
 }
 
 function limpiarBotonesActivos() {
@@ -151,31 +149,97 @@ function marcarBotonActivo(idBoton) {
     if (boton) boton.classList.add("activo");
 }
 
-// ── Atajos de teclado (HU-024) ────────────────────────────────────
+// ── Panel configurables en tiempo real ───────────────────────
+function configurarPanelConfigurables(ciudad) {
+    const config = ciudad.configuracion || {};
+
+    const poblar = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
+
+    poblar("cfg-turno",          config.duracionTurno         ?? 10);
+    poblar("cfg-electricidad",   ciudad.recursos?.electricidad?.cantidad ?? 0);
+    poblar("cfg-agua",           ciudad.recursos?.agua?.cantidad         ?? 0);
+    poblar("cfg-alimentos",      ciudad.recursos?.alimentos?.cantidad    ?? 0);
+    poblar("cfg-consumo-agua",   config.consumoAgua           ?? 1);
+    poblar("cfg-consumo-elec",   config.consumoElectricidad   ?? 1);
+    poblar("cfg-consumo-comida", config.consumoComida         ?? 1);
+
+    document.getElementById("btn-aplicar-config")
+        ?.addEventListener("click", () => {
+            const c = controladorCiudad.obtenerCiudadActual();
+            if (!c) return;
+
+            const nuevoTurno = parseInt(document.getElementById("cfg-turno").value) || 10;
+
+            c.configuracion = {
+                duracionTurno:        nuevoTurno,
+                tasaCrecimiento:      c.configuracion?.tasaCrecimiento ?? 2,
+                consumoAgua:          parseFloat(document.getElementById("cfg-consumo-agua").value)   || 1,
+                consumoElectricidad:  parseFloat(document.getElementById("cfg-consumo-elec").value)   || 1,
+                consumoComida:        parseFloat(document.getElementById("cfg-consumo-comida").value) || 1,
+            };
+
+            c.recursos.electricidad.cantidad = parseInt(document.getElementById("cfg-electricidad").value) || 0;
+            c.recursos.agua.cantidad         = parseInt(document.getElementById("cfg-agua").value)         || 0;
+            c.recursos.alimentos.cantidad    = parseInt(document.getElementById("cfg-alimentos").value)    || 0;
+
+            CiudadStorage.guardar(c);
+            controladorTurno.reiniciar(nuevoTurno);
+            mostrarNotificacion("⚙️ Configuración aplicada", "exito");
+            refrescarVista(c);
+        });
+}
+
+// ── Exportar ciudad a JSON ────────────────────────────────────
+function configurarExportacion() {
+    document.getElementById("btn-exportar-json")
+        ?.addEventListener("click", () => {
+            const ciudad = controladorCiudad.obtenerCiudadActual();
+            if (!ciudad) return;
+
+            const json   = JSON.stringify(ciudad.toJSON(), null, 2);
+            const blob   = new Blob([json], { type: "application/json" });
+            const url    = URL.createObjectURL(blob);
+            const fecha  = new Date().toISOString().slice(0, 10);
+            const enlace = document.createElement("a");
+            enlace.href     = url;
+            enlace.download = `ciudad_${ciudad.nombre}_${fecha}.json`;
+            enlace.click();
+            URL.revokeObjectURL(url);
+            mostrarNotificacion("📤 Ciudad exportada correctamente", "exito");
+        });
+
+    document.getElementById("btn-guardar-manual")
+        ?.addEventListener("click", () => guardarPartidaManual());
+}
+
+// ── Atajos de teclado ─────────────────────────────────────────
 function configurarAtajosTeclado() {
     document.addEventListener("keydown", (e) => {
-        // Ignorar si el foco está en un input
         if (["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName)) return;
 
         switch (e.key.toUpperCase()) {
             case "B":
                 document.querySelector(".panel-construccion")
                     ?.scrollIntoView({ behavior: "smooth" });
+                mostrarNotificacion("🏗️ Menú de construcción", "info");
                 break;
             case "R":
                 modoActual = "via";
                 marcarBotonActivo("btn-via");
-                mostrarNotificacion("Modo: construir vía", "info");
+                mostrarNotificacion("🛣️ Modo: construir vía", "info");
                 break;
             case "D":
                 modoActual = "demoler";
                 limpiarBotonesActivos();
-                mostrarNotificacion("Modo: demolición", "advertencia");
+                mostrarNotificacion("🔨 Modo: demolición", "advertencia");
                 break;
             case "ESCAPE":
                 modoActual = null;
                 limpiarBotonesActivos();
-                mostrarNotificacion("Modo cancelado", "info");
+                mostrarNotificacion("✖ Modo cancelado", "info");
                 break;
             case " ":
                 e.preventDefault();
@@ -194,7 +258,7 @@ function configurarAtajosTeclado() {
     });
 }
 
-// ── Guardado automático cada 30 segundos (HU-020) ─────────────────
+// ── Guardado automático cada 30 segundos ─────────────────────
 function iniciarGuardadoAutomatico() {
     if (intervaloGuardado) clearInterval(intervaloGuardado);
 
@@ -202,7 +266,7 @@ function iniciarGuardadoAutomatico() {
         const ciudad = controladorCiudad?.obtenerCiudadActual();
         if (ciudad) {
             CiudadStorage.guardar(ciudad);
-            mostrarNotificacion("💾 Partida guardada", "info");
+            mostrarNotificacion("💾 Guardado automático", "info");
         }
     }, 30000);
 }
@@ -211,11 +275,11 @@ function guardarPartidaManual() {
     const ciudad = controladorCiudad?.obtenerCiudadActual();
     if (ciudad) {
         CiudadStorage.guardar(ciudad);
-        mostrarNotificacion("💾 Partida guardada manualmente", "exito");
+        mostrarNotificacion("💾 Partida guardada", "exito");
     }
 }
 
-// ── Notificaciones ────────────────────────────────────────────────
+// ── Notificaciones ────────────────────────────────────────────
 function mostrarNotificacion(texto, tipo = "info") {
     let contenedor = document.getElementById("contenedor-notificaciones");
 
@@ -228,7 +292,6 @@ function mostrarNotificacion(texto, tipo = "info") {
     const notif = document.createElement("div");
     notif.className = `notificacion notificacion-${tipo}`;
     notif.textContent = texto;
-
     contenedor.appendChild(notif);
 
     setTimeout(() => notif.classList.add("visible"), 10);
@@ -238,46 +301,44 @@ function mostrarNotificacion(texto, tipo = "info") {
     }, 3000);
 }
 
-// ── Verificar fin de juego ────────────────────────────────────────
+// ── Verificar fin de juego ────────────────────────────────────
 function manejarFinJuego(ciudad, motivo) {
     controladorTurno.detener();
     clearInterval(intervaloGuardado);
 
     const mensajes = {
-        electricidad: "⚡ ¡Te quedaste sin electricidad! La ciudad colapsa.",
-        agua:         "💧 ¡Te quedaste sin agua! La ciudad colapsa."
+        electricidad: "⚡ ¡Sin electricidad! La ciudad colapsa.",
+        agua:         "💧 ¡Sin agua! La ciudad colapsa."
     };
 
-    const mensaje = mensajes[motivo] || "La ciudad ha colapsado.";
-
     setTimeout(() => {
-        alert(`${mensaje}\n\nPuntuación final: ${ciudad.puntuacion}\nTurnos jugados: ${ciudad.turnoActual}`);
+        alert(
+            `${mensajes[motivo] || "La ciudad colapsó."}\n\n` +
+            `Puntuación final: ${ciudad.puntuacion}\n` +
+            `Turnos jugados: ${ciudad.turnoActual}`
+        );
         window.location.href = "../../index.html";
     }, 500);
 }
 
-// ── Inicializar vista del juego ───────────────────────────────────
+// ── Inicializar vista del juego ───────────────────────────────
 function inicializarVistaJuego() {
     const ciudad = CiudadStorage.cargar();
 
     if (!ciudad) {
-        alert("No hay una ciudad guardada. Primero debes crear una ciudad.");
+        alert("No hay ciudad guardada. Crea una primero.");
         window.location.href = "../../index.html";
         return;
     }
 
-    // Controladores
     controladorCiudad  = new ControladorCiudad();
     controladorJugador = new ControladorJugador();
     controladorCiudad.ciudad = ciudad;
 
-    // Vincular jugador a ciudad
     controladorJugador.cargarJugador();
     controladorJugador.vincularCiudad(ciudad);
 
-    // Leer configuración guardada en ciudad
-    const config = ciudad.configuracion || {};
-    const duracionTurno = (config.duracionTurno || 10) * 1000;
+    const duracionTurno = (ciudad.configuracion?.duracionTurno ?? 10) * 1000;
 
     // Renderizar vista inicial
     refrescarVista(ciudad);
@@ -288,9 +349,11 @@ function inicializarVistaJuego() {
 
     // Configurar interacciones
     configurarBotonesConstruccion();
+    configurarPanelConfigurables(ciudad);
     configurarAtajosTeclado();
+    configurarExportacion();
 
-    // Iniciar turno con duración configurada
+    // Iniciar turnos
     controladorTurno = new ControladorTurno((ciudadActualizada, estado) => {
         controladorCiudad.ciudad = ciudadActualizada;
         controladorJugador.actualizarTrasturno(ciudadActualizada);

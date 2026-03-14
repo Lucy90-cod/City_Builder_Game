@@ -303,3 +303,101 @@ body {
         padding: 18px 14px;
     }
 }
+
+/* ── Carga de archivo ────────────────────────────────────────── */
+.carga-archivo-area {
+    position: relative;
+    border: 2px dashed #93c5fd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #3b82f6;
+    font-size: 0.9rem;
+    background: #eff6ff;
+    transition: background 0.2s, border-color 0.2s;
+    margin-top: 6px;
+}
+
+.carga-archivo-area:hover,
+.carga-archivo-area.arrastrando {
+    background: #dbeafe;
+    border-color: #2563eb;
+}
+
+.input-archivo-oculto {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.estado-archivo-exito { color: #065f46; font-weight: 600; }
+.estado-archivo-error { color: #991b1b; font-weight: 600; }
+
+/* ── Preview del mapa ────────────────────────────────────────── */
+.preview-mapa {
+    margin-top: 12px;
+    border: 1px solid #e0e7ef;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f8fafc;
+}
+
+.preview-titulo {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.preview-grid {
+    display: grid;
+    gap: 1px;
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.preview-celda {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 1px;
+    min-width: 6px;
+    min-height: 6px;
+}
+
+/* ── Separador ───────────────────────────────────────────────── */
+.separador-o {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.82rem;
+    margin: 12px 0;
+    position: relative;
+}
+
+.separador-o::before,
+.separador-o::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.separador-o::before { left: 0; }
+.separador-o::after  { right: 0; }
+
+/* ── Badge ───────────────────────────────────────────────────── */
+.badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    vertical-align: middle;
+}

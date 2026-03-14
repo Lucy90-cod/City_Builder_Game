@@ -14,14 +14,15 @@
             <h2>¡Partida guardada encontrada!</h2>
             <p id="modal-info-partida"></p>
             <div class="modal-botones">
-                <button id="btn-continuar-partida" class="btn-primario">Continuar partida</button>
-                <button id="btn-nueva-partida" class="btn-secundario">Nueva ciudad</button>
+                <button id="btn-continuar-partida" class="btn-primario">▶ Continuar partida</button>
+                <button id="btn-nueva-partida" class="btn-secundario">🆕 Nueva ciudad</button>
             </div>
         </div>
     </div>
 
     <main class="pagina-inicio">
         <div class="formulario-ciudad">
+
             <div class="formulario-header">
                 <h1>🏙️ City Builder Game</h1>
                 <p class="subtitulo">Crea tu ciudad y conviértete en el mejor alcalde</p>
@@ -36,7 +37,7 @@
                     <div class="campo">
                         <label for="nombreCiudad">Nombre de la ciudad *</label>
                         <input type="text" id="nombreCiudad" maxlength="50"
-                               placeholder="Ej: Nueva Springfield" required>
+                               placeholder="Ej: Springfield" required>
                     </div>
 
                     <div class="campo">
@@ -64,7 +65,7 @@
                         </select>
                     </div>
 
-                    <div class="campo coordenadas-preview">
+                    <div class="campo">
                         <label>Coordenadas detectadas</label>
                         <div id="coordenadas-info" class="coordenadas-info">
                             <span id="lat-display">Lat: --</span>
@@ -80,17 +81,36 @@
                 <fieldset class="seccion-form">
                     <legend>Configuración del mapa</legend>
 
+                    <!-- Cargar desde archivo -->
+                    <div class="campo">
+                        <label>Cargar mapa desde archivo <span class="badge">.txt</span></label>
+                        <div class="carga-archivo-area" id="carga-archivo-area">
+                            <span>📂 Arrastra un archivo .txt o haz click aquí</span>
+                            <input type="file" id="inputArchivoMapa" accept=".txt"
+                                   class="input-archivo-oculto">
+                        </div>
+                        <p id="estado-archivo" class="campo-ayuda"></p>
+                    </div>
+
+                    <div class="separador-o">
+                        <span>— o configura manualmente —</span>
+                    </div>
+
                     <div class="campos-dobles">
                         <div class="campo">
                             <label for="anchoMapa">Ancho (15–30) *</label>
-                            <input type="number" id="anchoMapa" min="15" max="30"
-                                   value="20" required>
+                            <input type="number" id="anchoMapa" min="15" max="30" value="20">
                         </div>
                         <div class="campo">
                             <label for="altoMapa">Alto (15–30) *</label>
-                            <input type="number" id="altoMapa" min="15" max="30"
-                                   value="20" required>
+                            <input type="number" id="altoMapa" min="15" max="30" value="20">
                         </div>
+                    </div>
+
+                    <!-- Preview del mapa cargado -->
+                    <div id="preview-mapa" class="preview-mapa oculto">
+                        <p class="preview-titulo">Vista previa del mapa cargado:</p>
+                        <div id="preview-grid" class="preview-grid"></div>
                     </div>
                 </fieldset>
 
@@ -99,37 +119,34 @@
                     <legend>Parámetros del juego</legend>
 
                     <div class="campo">
-                        <label for="duracionTurno">Duración del turno (segundos)</label>
-                        <input type="number" id="duracionTurno" min="5" max="120"
-                               value="10">
+                        <label for="duracionTurno">⏱️ Duración del turno (segundos)</label>
+                        <input type="number" id="duracionTurno" min="5" max="120" value="10">
                         <span class="campo-ayuda">Recomendado: 10 segundos</span>
                     </div>
 
                     <div class="campo">
-                        <label for="tasaCrecimiento">Tasa de crecimiento poblacional (ciudadanos/turno)</label>
-                        <input type="number" id="tasaCrecimiento" min="1" max="10"
-                               value="2">
-                        <span class="campo-ayuda">Entre 1 y 3 por defecto</span>
+                        <label for="tasaCrecimiento">🌱 Tasa de crecimiento (ciudadanos/turno)</label>
+                        <input type="number" id="tasaCrecimiento" min="1" max="10" value="2">
                     </div>
                 </fieldset>
 
                 <!-- SECCIÓN: Recursos iniciales -->
                 <fieldset class="seccion-form">
-                    <legend>Recursos iniciales configurables</legend>
+                    <legend>Recursos iniciales</legend>
 
                     <div class="campos-dobles">
                         <div class="campo">
-                            <label for="electricidadInicial">Electricidad inicial (u/t)</label>
+                            <label for="electricidadInicial">⚡ Electricidad (u/t)</label>
                             <input type="number" id="electricidadInicial" min="0" value="0">
                         </div>
                         <div class="campo">
-                            <label for="aguaInicial">Agua inicial (u/t)</label>
+                            <label for="aguaInicial">💧 Agua (u/t)</label>
                             <input type="number" id="aguaInicial" min="0" value="0">
                         </div>
                     </div>
 
                     <div class="campo">
-                        <label for="alimentosInicial">Alimentos iniciales (u)</label>
+                        <label for="alimentosInicial">🌾 Alimentos (u)</label>
                         <input type="number" id="alimentosInicial" min="0" value="0">
                     </div>
                 </fieldset>
@@ -140,15 +157,15 @@
 
                     <div class="campos-tres">
                         <div class="campo">
-                            <label for="consumoAgua">Agua (X)</label>
+                            <label for="consumoAgua">💧 Agua (X)</label>
                             <input type="number" id="consumoAgua" min="0" step="0.1" value="1">
                         </div>
                         <div class="campo">
-                            <label for="consumoElectricidad">Electricidad (Y)</label>
+                            <label for="consumoElectricidad">⚡ Electricidad (Y)</label>
                             <input type="number" id="consumoElectricidad" min="0" step="0.1" value="1">
                         </div>
                         <div class="campo">
-                            <label for="consumoComida">Comida (Z)</label>
+                            <label for="consumoComida">🌾 Comida (Z)</label>
                             <input type="number" id="consumoComida" min="0" step="0.1" value="1">
                         </div>
                     </div>
@@ -159,6 +176,7 @@
                 <button type="submit" id="btn-crear" class="btn-primario btn-crear" disabled>
                     🏗️ Crear ciudad
                 </button>
+
             </form>
         </div>
     </main>

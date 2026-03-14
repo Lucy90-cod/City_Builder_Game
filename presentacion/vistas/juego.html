@@ -3,92 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de la ciudad</title>
+    <title>City Builder — Juego</title>
     <link rel="stylesheet" href="../estilos/juego.css">
-    <link rel="stylesheet" href="../estilos/mapa.css">
+    <link rel="stylesheet" href="../estilos/Mapa.css">
+    <link rel="stylesheet" href="../estilos/paneles.css">
 </head>
 <body>
+
     <div class="layout-juego">
+
+        <!-- ── Sidebar izquierdo ─────────────────────────────── -->
         <aside class="sidebar-izquierda">
-            <h1 id="nombre-ciudad">Ciudad</h1>
+
+            <h1 id="nombre-ciudad">🏙️ Ciudad</h1>
             <div id="datos-ciudad" class="datos-ciudad"></div>
 
+            <!-- Panel de recursos -->
             <section>
-                <h2>Panel de recursos</h2>
+                <h2 class="seccion-titulo">📦 Recursos</h2>
                 <div id="panel-recursos"></div>
             </section>
 
+            <!-- Panel de construcción -->
             <section class="panel-construccion">
-                <h2>Construcción</h2>
+                <h2 class="seccion-titulo">🏗️ Construcción</h2>
 
                 <div class="grupo-construccion">
                     <h3>Vías</h3>
-                    <button id="btn-via" class="boton-construccion">Construir vía</button>
+                    <button id="btn-via" class="boton-construccion">🛣️ Construir vía ($100)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Residenciales</h3>
-                    <button id="btn-casa" class="boton-construccion">Casa</button>
-                    <button id="btn-apartamento" class="boton-construccion">Apartamento</button>
+                    <button id="btn-casa" class="boton-construccion">🏠 Casa ($1,000)</button>
+                    <button id="btn-apartamento" class="boton-construccion">🏢 Apartamento ($3,000)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Comerciales</h3>
-                    <button id="btn-tienda" class="boton-construccion">Tienda</button>
-                    <button id="btn-centro-comercial" class="boton-construccion">Centro comercial</button>
+                    <button id="btn-tienda" class="boton-construccion">🏪 Tienda ($2,000)</button>
+                    <button id="btn-centro-comercial" class="boton-construccion">🏬 Centro Comercial ($8,000)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Industriales</h3>
-                    <button id="btn-fabrica" class="boton-construccion">Fábrica</button>
-                    <button id="btn-granja" class="boton-construccion">Granja</button>
+                    <button id="btn-fabrica" class="boton-construccion">🏭 Fábrica ($5,000)</button>
+                    <button id="btn-granja" class="boton-construccion">🌾 Granja ($3,000)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Servicios</h3>
-                    <button id="btn-policia" class="boton-construccion">Policía</button>
-                    <button id="btn-bomberos" class="boton-construccion">Bomberos</button>
-                    <button id="btn-hospital" class="boton-construccion">Hospital</button>
+                    <button id="btn-policia" class="boton-construccion">👮 Policía ($4,000)</button>
+                    <button id="btn-bomberos" class="boton-construccion">🚒 Bomberos ($4,000)</button>
+                    <button id="btn-hospital" class="boton-construccion">🏥 Hospital ($6,000)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Utilidades</h3>
-                    <button id="btn-planta-electrica" class="boton-construccion">Planta eléctrica</button>
-                    <button id="btn-planta-agua" class="boton-construccion">Planta de agua</button>
+                    <button id="btn-planta-electrica" class="boton-construccion">⚡ Planta Eléctrica ($10,000)</button>
+                    <button id="btn-planta-agua" class="boton-construccion">💧 Planta de Agua ($8,000)</button>
                 </div>
 
                 <div class="grupo-construccion">
                     <h3>Recreación</h3>
-                    <button id="btn-parque" class="boton-construccion">Parque</button>
+                    <button id="btn-parque" class="boton-construccion">🌳 Parque ($1,500)</button>
                 </div>
 
                 <button id="btn-cancelar-construccion" class="boton-cancelar">
-                    Cancelar selección
+                    ✖ Cancelar selección (ESC)
                 </button>
             </section>
+
+            <!-- Panel configurables en tiempo real -->
+            <section class="panel-configurables">
+                <h2 class="seccion-titulo">⚙️ Configuración</h2>
+
+                <div class="configurable-item">
+                    <label for="cfg-turno">⏱️ Duración turno (seg)</label>
+                    <input type="number" id="cfg-turno" min="5" max="120" value="10">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-electricidad">⚡ Electricidad disponible</label>
+                    <input type="number" id="cfg-electricidad" min="0" value="0">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-agua">💧 Agua disponible</label>
+                    <input type="number" id="cfg-agua" min="0" value="0">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-alimentos">🌾 Alimentos disponibles</label>
+                    <input type="number" id="cfg-alimentos" min="0" value="0">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-consumo-agua">💧 Consumo agua/ciudadano (X)</label>
+                    <input type="number" id="cfg-consumo-agua" min="0" step="0.1" value="1">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-consumo-elec">⚡ Consumo electricidad/ciudadano (Y)</label>
+                    <input type="number" id="cfg-consumo-elec" min="0" step="0.1" value="1">
+                </div>
+
+                <div class="configurable-item">
+                    <label for="cfg-consumo-comida">🌾 Consumo comida/ciudadano (Z)</label>
+                    <input type="number" id="cfg-consumo-comida" min="0" step="0.1" value="1">
+                </div>
+
+                <button id="btn-aplicar-config" class="btn-aplicar-config">
+                    💾 Aplicar cambios
+                </button>
+            </section>
+
         </aside>
 
+        <!-- ── Zona central (mapa) ────────────────────────────── -->
         <main class="zona-mapa">
-            <h2>Mapa principal</h2>
-            <div id="contenedor-mapa" class="contenedor-mapa">
-                <p>Aquí se mostrará el mapa de la ciudad.</p>
+            <div class="zona-mapa-header">
+                <h2>🗺️ Mapa principal</h2>
+                <div class="zona-mapa-acciones">
+                    <button id="btn-guardar-manual" class="btn-accion">💾 Guardar (S)</button>
+                    <button id="btn-exportar-json" class="btn-accion">📤 Exportar JSON</button>
+                    <button id="btn-calcular-ruta" class="btn-accion">🧭 Calcular ruta</button>
+                </div>
             </div>
+            <div id="contenedor-mapa" class="contenedor-mapa"></div>
         </main>
 
+        <!-- ── Sidebar derecho ────────────────────────────────── -->
         <aside class="sidebar-derecha">
+
             <section class="widget">
-                <h2>Clima</h2>
+                <h2>🌤️ Clima</h2>
                 <div id="widget-clima">
-                    <p>Próximamente.</p>
+                    <p class="clima-cargando">Cargando clima...</p>
                 </div>
             </section>
 
             <section class="widget">
-                <h2>Noticias</h2>
+                <h2>📰 Noticias</h2>
                 <div id="widget-noticias">
-                    <p>Próximamente.</p>
+                    <p class="noticias-cargando">Cargando noticias...</p>
                 </div>
             </section>
+
         </aside>
     </div>
 
