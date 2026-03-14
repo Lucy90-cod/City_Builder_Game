@@ -2,54 +2,166 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Crear Ciudad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Builder Game</title>
     <link rel="stylesheet" href="./presentacion/estilos/ciudad.css">
 </head>
 <body>
-    <section class="formulario-ciudad">
-        <h1>Crear nueva ciudad</h1>
 
-        <form id="formCrearCiudad">
-            <div>
-                <label for="nombreCiudad">Nombre de la ciudad</label>
-                <input type="text" id="nombreCiudad" name="nombreCiudad" maxlength="50" required>
+    <!-- Modal: continuar partida guardada -->
+    <div id="modal-continuar" class="modal-overlay oculto">
+        <div class="modal-caja">
+            <h2>¡Partida guardada encontrada!</h2>
+            <p id="modal-info-partida"></p>
+            <div class="modal-botones">
+                <button id="btn-continuar-partida" class="btn-primario">Continuar partida</button>
+                <button id="btn-nueva-partida" class="btn-secundario">Nueva ciudad</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="pagina-inicio">
+        <div class="formulario-ciudad">
+            <div class="formulario-header">
+                <h1>🏙️ City Builder Game</h1>
+                <p class="subtitulo">Crea tu ciudad y conviértete en el mejor alcalde</p>
             </div>
 
-            <div>
-                <label for="nombreAlcalde">Nombre del alcalde</label>
-                <input type="text" id="nombreAlcalde" name="nombreAlcalde" maxlength="50" required>
-            </div>
+            <form id="formCrearCiudad" novalidate>
 
-            <div>
-                <label for="region">Región</label>
-                <input type="text" id="region" name="region" required>
-            </div>
+                <!-- SECCIÓN: Datos básicos -->
+                <fieldset class="seccion-form">
+                    <legend>Datos de la ciudad</legend>
 
-            <div>
-                <label for="latitud">Latitud (ejm: 5.0703)</label>
-                <input type="number" id="latitud" name="latitud" step="any" required>
-            </div>
+                    <div class="campo">
+                        <label for="nombreCiudad">Nombre de la ciudad *</label>
+                        <input type="text" id="nombreCiudad" maxlength="50"
+                               placeholder="Ej: Nueva Springfield" required>
+                    </div>
 
-            <div>
-                <label for="longitud">Longitud (ejm: -75.5138)</label>
-                <input type="number" id="longitud" name="longitud" step="any" required>
-            </div>
+                    <div class="campo">
+                        <label for="nombreAlcalde">Nombre del alcalde *</label>
+                        <input type="text" id="nombreAlcalde" maxlength="50"
+                               placeholder="Ej: Diamante" required>
+                    </div>
+                </fieldset>
 
-            <div>
-                <label for="anchoMapa">Ancho del mapa</label>
-                <input type="number" id="anchoMapa" name="anchoMapa" min="15" max="30" required>
-            </div>
+                <!-- SECCIÓN: Región geográfica -->
+                <fieldset class="seccion-form">
+                    <legend>Región geográfica (Colombia)</legend>
 
-            <div>
-                <label for="altoMapa">Alto del mapa</label>
-                <input type="number" id="altoMapa" name="altoMapa" min="15" max="30" required>
-            </div>
+                    <div class="campo">
+                        <label for="selectDepartamento">Departamento *</label>
+                        <select id="selectDepartamento" required>
+                            <option value="">-- Cargando departamentos... --</option>
+                        </select>
+                    </div>
 
-            <button type="submit">Crear ciudad</button>
-        </form>
+                    <div class="campo">
+                        <label for="selectMunicipio">Municipio *</label>
+                        <select id="selectMunicipio" required disabled>
+                            <option value="">-- Selecciona un departamento primero --</option>
+                        </select>
+                    </div>
 
-        <p id="mensaje"></p>
-    </section>
+                    <div class="campo coordenadas-preview">
+                        <label>Coordenadas detectadas</label>
+                        <div id="coordenadas-info" class="coordenadas-info">
+                            <span id="lat-display">Lat: --</span>
+                            <span id="lon-display">Lon: --</span>
+                        </div>
+                        <input type="hidden" id="region">
+                        <input type="hidden" id="latitud">
+                        <input type="hidden" id="longitud">
+                    </div>
+                </fieldset>
+
+                <!-- SECCIÓN: Mapa -->
+                <fieldset class="seccion-form">
+                    <legend>Configuración del mapa</legend>
+
+                    <div class="campos-dobles">
+                        <div class="campo">
+                            <label for="anchoMapa">Ancho (15–30) *</label>
+                            <input type="number" id="anchoMapa" min="15" max="30"
+                                   value="20" required>
+                        </div>
+                        <div class="campo">
+                            <label for="altoMapa">Alto (15–30) *</label>
+                            <input type="number" id="altoMapa" min="15" max="30"
+                                   value="20" required>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- SECCIÓN: Parámetros del juego -->
+                <fieldset class="seccion-form">
+                    <legend>Parámetros del juego</legend>
+
+                    <div class="campo">
+                        <label for="duracionTurno">Duración del turno (segundos)</label>
+                        <input type="number" id="duracionTurno" min="5" max="120"
+                               value="10">
+                        <span class="campo-ayuda">Recomendado: 10 segundos</span>
+                    </div>
+
+                    <div class="campo">
+                        <label for="tasaCrecimiento">Tasa de crecimiento poblacional (ciudadanos/turno)</label>
+                        <input type="number" id="tasaCrecimiento" min="1" max="10"
+                               value="2">
+                        <span class="campo-ayuda">Entre 1 y 3 por defecto</span>
+                    </div>
+                </fieldset>
+
+                <!-- SECCIÓN: Recursos iniciales -->
+                <fieldset class="seccion-form">
+                    <legend>Recursos iniciales configurables</legend>
+
+                    <div class="campos-dobles">
+                        <div class="campo">
+                            <label for="electricidadInicial">Electricidad inicial (u/t)</label>
+                            <input type="number" id="electricidadInicial" min="0" value="0">
+                        </div>
+                        <div class="campo">
+                            <label for="aguaInicial">Agua inicial (u/t)</label>
+                            <input type="number" id="aguaInicial" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <label for="alimentosInicial">Alimentos iniciales (u)</label>
+                        <input type="number" id="alimentosInicial" min="0" value="0">
+                    </div>
+                </fieldset>
+
+                <!-- SECCIÓN: Consumo por ciudadano -->
+                <fieldset class="seccion-form">
+                    <legend>Consumo por ciudadano por turno</legend>
+
+                    <div class="campos-tres">
+                        <div class="campo">
+                            <label for="consumoAgua">Agua (X)</label>
+                            <input type="number" id="consumoAgua" min="0" step="0.1" value="1">
+                        </div>
+                        <div class="campo">
+                            <label for="consumoElectricidad">Electricidad (Y)</label>
+                            <input type="number" id="consumoElectricidad" min="0" step="0.1" value="1">
+                        </div>
+                        <div class="campo">
+                            <label for="consumoComida">Comida (Z)</label>
+                            <input type="number" id="consumoComida" min="0" step="0.1" value="1">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <p id="mensaje" class="mensaje" aria-live="polite"></p>
+
+                <button type="submit" id="btn-crear" class="btn-primario btn-crear" disabled>
+                    🏗️ Crear ciudad
+                </button>
+            </form>
+        </div>
+    </main>
 
     <script type="module" src="./presentacion/Scripts/index.js"></script>
 </body>

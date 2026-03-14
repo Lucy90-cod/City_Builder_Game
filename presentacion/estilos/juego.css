@@ -1,101 +1,403 @@
-* {
+/* ── Reset ───────────────────────────────────────────────────── */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #222;
-}
-
-.layout-juego {
-    display: grid;
-    grid-template-columns: 280px 1fr 280px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #0f172a;
+    color: #e2e8f0;
     min-height: 100vh;
 }
 
+/* ── Layout principal ────────────────────────────────────────── */
+.layout-juego {
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    min-height: 100vh;
+}
+
+/* ── Sidebars ────────────────────────────────────────────────── */
 .sidebar-izquierda,
 .sidebar-derecha {
-    background-color: #ffffff;
-    padding: 20px;
+    background-color: #1e293b;
+    padding: 16px;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
-.sidebar-izquierda {
-    border-right: 1px solid #dcdcdc;
-}
+.sidebar-izquierda { border-right: 1px solid #334155; }
+.sidebar-derecha   { border-left:  1px solid #334155; }
 
-.sidebar-derecha {
-    border-left: 1px solid #dcdcdc;
-}
-
+/* ── Zona mapa ───────────────────────────────────────────────── */
 .zona-mapa {
     padding: 20px;
-    background-color: #eef2f5;
+    background-color: #0f172a;
+    display: flex;
+    flex-direction: column;
+}
+
+.zona-mapa h2 {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+}
+
+/* ── Nombre ciudad ───────────────────────────────────────────── */
+#nombre-ciudad {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
 }
 
 .datos-ciudad {
-    margin: 20px 0;
+    font-size: 0.82rem;
+    color: #94a3b8;
     line-height: 1.8;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #334155;
 }
 
+/* ── Panel recursos ──────────────────────────────────────────── */
 #panel-recursos {
     display: grid;
-    gap: 12px;
-    margin-top: 15px;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .recurso-card {
-    background-color: #f9fafb;
-    border: 1px solid #d7dde4;
-    border-radius: 10px;
-    padding: 14px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+    cursor: default;
+    position: relative;
 }
 
-.recurso-card h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
-}
+.recurso-card:hover { border-color: #60a5fa; }
 
-.recurso-card p {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.contenedor-mapa {
-    margin-top: 20px;
-    min-height: 500px;
-    border: 2px dashed #b8c2cc;
-    border-radius: 10px;
-    background-color: #ffffff;
+.recurso-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #666;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
-.widget {
-    background-color: #f9fafb;
-    border: 1px solid #d7dde4;
+.recurso-header h3 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.recurso-icono { font-size: 1rem; }
+
+.recurso-valor {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+}
+
+.recurso-detalle {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Colores por estado */
+.recurso-card.alto  { border-left: 3px solid #22c55e; }
+.recurso-card.medio { border-left: 3px solid #f59e0b; }
+.recurso-card.bajo  { border-left: 3px solid #ef4444; }
+
+/* Balances */
+.balance-positivo { color: #22c55e; font-weight: 600; }
+.balance-negativo { color: #ef4444; font-weight: 600; }
+.balance-neutro   { color: #94a3b8; }
+
+/* Barra de felicidad */
+.barra-felicidad {
+    background: #334155;
+    border-radius: 4px;
+    height: 6px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.barra-felicidad-relleno {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* ── Panel construcción ──────────────────────────────────────── */
+.panel-construccion h2 {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 16px 0 10px;
+    padding-top: 16px;
+    border-top: 1px solid #334155;
+}
+
+.grupo-construccion {
+    margin-bottom: 12px;
+}
+
+.grupo-construccion h3 {
+    font-size: 0.72rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+.boton-construccion {
+    display: block;
+    width: 100%;
+    padding: 7px 10px;
+    margin-bottom: 4px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.boton-construccion:hover {
+    background: #334155;
+    border-color: #60a5fa;
+    color: #f1f5f9;
+}
+
+.boton-construccion.activo {
+    background: #1d4ed8;
+    border-color: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+}
+
+.boton-cancelar {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #450a0a;
+    border: 1px solid #7f1d1d;
+    border-radius: 6px;
+    color: #fca5a5;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.boton-cancelar:hover { background: #7f1d1d; }
+
+/* ── Contenedor mapa ─────────────────────────────────────────── */
+.contenedor-mapa {
+    flex: 1;
+    border: 1px solid #334155;
     border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
+    background: #0a0f1e;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 12px;
+    min-height: 400px;
+}
+
+/* ── Widgets (clima y noticias) ──────────────────────────────── */
+.widget {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
 }
 
 .widget h2 {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     margin-bottom: 10px;
-    font-size: 18px;
 }
 
+/* Clima */
+.tarjeta-clima { font-size: 0.88rem; color: #cbd5e1; }
+.clima-region  { font-weight: 600; color: #60a5fa; margin-bottom: 8px; }
+
+.clima-principal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+}
+
+.clima-icono        { width: 48px; height: 48px; }
+.clima-temperatura  { font-size: 2rem; font-weight: 700; color: #f1f5f9; }
+.clima-descripcion  { color: #94a3b8; font-size: 0.82rem; margin-bottom: 8px; text-transform: capitalize; }
+
+.clima-detalles {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.clima-cargando, .clima-error { color: #64748b; font-size: 0.85rem; }
+
+/* Noticias */
+.noticias-lista   { display: flex; flex-direction: column; gap: 10px; }
+.noticias-cargando, .noticias-error { color: #64748b; font-size: 0.85rem; }
+
+.noticia-item {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.noticia-item:last-child { border-bottom: none; }
+
+.noticia-imagen {
+    width: 56px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.noticia-contenido { flex: 1; }
+
+.noticia-titulo {
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 3px;
+}
+
+.noticia-titulo a {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.noticia-titulo a:hover { text-decoration: underline; }
+
+.noticia-fuente {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.noticias-timestamp {
+    font-size: 0.7rem;
+    color: #475569;
+    margin-top: 8px;
+    text-align: right;
+}
+
+/* ── Notificaciones ──────────────────────────────────────────── */
+#contenedor-notificaciones {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 320px;
+}
+
+.notificacion {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.notificacion.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notificacion-info       { background: #1e40af; color: #bfdbfe; border-left: 3px solid #3b82f6; }
+.notificacion-exito      { background: #14532d; color: #bbf7d0; border-left: 3px solid #22c55e; }
+.notificacion-error      { background: #7f1d1d; color: #fecaca; border-left: 3px solid #ef4444; }
+.notificacion-advertencia{ background: #78350f; color: #fde68a; border-left: 3px solid #f59e0b; }
+
+/* ── Responsive tablet ───────────────────────────────────────── */
 @media (max-width: 1024px) {
     .layout-juego {
-        grid-template-columns: 1fr;
+        grid-template-columns: 240px 1fr;
+        grid-template-rows: auto 1fr auto;
     }
 
-    .sidebar-izquierda,
-    .sidebar-derecha,
-    .zona-mapa {
-        border: none;
+    .sidebar-derecha {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        border-left: none;
+        border-top: 1px solid #334155;
+        max-height: none;
     }
+}
+
+/* ── Responsive móvil ────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .layout-juego {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .sidebar-izquierda {
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid #334155;
+    }
+
+    .sidebar-derecha {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .zona-mapa { padding: 12px; }
+
+    .contenedor-mapa { min-height: 300px; }
+
+    .boton-construccion { min-height: 44px; font-size: 0.9rem; }
+
+    #contenedor-notificaciones {
+        top: auto;
+        bottom: 16px;
+        right: 8px;
+        left: 8px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .datos-ciudad { font-size: 0.78rem; }
+    .recurso-valor { font-size: 0.95rem; }
+    .widget { padding: 10px; }
 }
