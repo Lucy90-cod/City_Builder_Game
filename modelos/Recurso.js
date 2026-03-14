@@ -20,6 +20,14 @@ export default class Recurso {
         this.consumo = 0;
     }
 
+    agregarProduccion(valor) {
+        this.produccion += valor;
+    }
+
+    agregarConsumo(valor) {
+        this.consumo += valor;
+    }
+
     toJSON() {
         return {
             nombre: this.nombre,

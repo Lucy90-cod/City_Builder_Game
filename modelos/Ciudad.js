@@ -1,4 +1,5 @@
 import Recurso from "./Recurso.js";
+import { Mapa } from "./Mapa.js";
 
 export default class Ciudad {
     constructor({ nombre, alcalde, region, latitud, longitud, ancho, alto }) {
@@ -15,29 +16,18 @@ export default class Ciudad {
         this.puntuacion = 0;
         this.felicidadPromedio = 0;
 
-
         this.recursos = {
-            dinero: new Recurso("Dinero", 50000, "$"),
-            electricidad: new Recurso("Electricidad", 0, "u/t"),
-            agua: new Recurso("Agua", 0, "u/t"),
-            alimentos: new Recurso("Alimentos", 0, "u")
+            dinero: new Recurso("Dinero", 50000, 0, 0, "$"),
+            electricidad: new Recurso("Electricidad", 0, 0, 0, "u/t"),
+            agua: new Recurso("Agua", 0, 0, 0, "u/t"),
+            alimentos: new Recurso("Alimentos", 0, 0, 0, "u")
         };
 
-        this.mapa = [];
+        this.mapa = new Mapa(ancho, alto);
     }
 
     inicializarMapa() {
-        this.mapa = [];
-
-        for (let fila = 0; fila < this.alto; fila++) {
-            const nuevaFila = [];
-
-            for (let columna = 0; columna < this.ancho; columna++) {
-                nuevaFila.push(null);
-            }
-
-            this.mapa.push(nuevaFila);
-        }
+        this.mapa = new Mapa(this.ancho, this.alto);
     }
 
     toJSON() {
@@ -59,7 +49,7 @@ export default class Ciudad {
                 agua: this.recursos.agua.toJSON(),
                 alimentos: this.recursos.alimentos.toJSON()
             },
-            mapa: this.mapa
+            mapa: this.mapa.toJSON()
         };
     }
 
@@ -74,15 +64,17 @@ export default class Ciudad {
             alto: data.alto
         });
 
-        ciudad.turnoActual = data.turnoActual;
-        ciudad.poblacion = data.poblacion;
-        ciudad.puntuacion = data.puntuacion;
+        ciudad.turnoActual = data.turnoActual ?? 0;
+        ciudad.poblacion = data.poblacion ?? 0;
+        ciudad.puntuacion = data.puntuacion ?? 0;
         ciudad.felicidadPromedio = data.felicidadPromedio ?? 0;
+
         ciudad.recursos.dinero = Recurso.fromJSON(data.recursos.dinero);
         ciudad.recursos.electricidad = Recurso.fromJSON(data.recursos.electricidad);
         ciudad.recursos.agua = Recurso.fromJSON(data.recursos.agua);
         ciudad.recursos.alimentos = Recurso.fromJSON(data.recursos.alimentos);
-        ciudad.mapa = data.mapa || [];
+
+        ciudad.mapa = data.mapa ? Mapa.fromJSON(data.mapa) : new Mapa(data.ancho, data.alto);
 
         return ciudad;
     }

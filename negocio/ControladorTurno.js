@@ -1,10 +1,12 @@
 import CiudadStorage from "../acceso_datos/CiudadStorage.js";
+import ControladorRecurso from "./ControladorRecurso.js";
 
 export default class ControladorTurno {
     constructor(onTurnoActualizado = null, intervalo = 10000) {
         this.onTurnoActualizado = onTurnoActualizado;
         this.intervalo = intervalo;
         this.temporizador = null;
+        this.controladorRecurso = new ControladorRecurso();
     }
 
     iniciar() {
@@ -31,6 +33,8 @@ export default class ControladorTurno {
             this.detener();
             return;
         }
+
+        this.controladorRecurso.procesarTurno(ciudad);
 
         ciudad.turnoActual += 1;
 
