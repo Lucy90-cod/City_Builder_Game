@@ -1,5 +1,11 @@
 import Ciudad from "../modelos/Ciudad.js";
 import CiudadStorage from "../acceso_datos/CiudadStorage.js";
+import { Residencial } from "../modelos/Residencial.js";
+import { Comercial } from "../modelos/Comercial.js";
+import { Industrial } from "../modelos/Industrial.js";
+import { Servicio } from "../modelos/Servicio.js";
+import { Planta } from "../modelos/Planta.js";
+import { Parque } from "../modelos/Parque.js";
 
 export default class ControladorCiudad {
     constructor() {
@@ -75,5 +81,85 @@ export default class ControladorCiudad {
 
     obtenerCiudadActual() {
         return this.ciudad;
+    }
+
+    construirEdificio(subtipo, x, y) {
+        if (!this.ciudad) {
+            this.cargarCiudad();
+        }
+
+        if (!this.ciudad) {
+            throw new Error("No hay una ciudad cargada");
+        }
+
+        const edificio = this.crearInstanciaEdificio(subtipo, x, y);
+        const costo = edificio.getCosto();
+
+        if (this.ciudad.recursos.dinero.cantidad < costo) {
+            throw new Error("No hay dinero suficiente para construir");
+        }
+
+        this.ciudad.mapa.colocarEdificio(edificio.getId(), x, y);
+        this.ciudad.agregarEdificio(edificio);
+        this.ciudad.recursos.dinero.cantidad -= costo;
+
+        CiudadStorage.guardar(this.ciudad);
+        return edificio;
+    }
+
+    construirVia(x, y) {
+        if (!this.ciudad) {
+            this.cargarCiudad();
+        }
+
+        if (!this.ciudad) {
+            throw new Error("No hay una ciudad cargada");
+        }
+
+        const costoVia = 100;
+
+        if (this.ciudad.recursos.dinero.cantidad < costoVia) {
+            throw new Error("No hay dinero suficiente para construir la vía");
+        }
+
+        this.ciudad.mapa.colocarVia(x, y);
+        this.ciudad.recursos.dinero.cantidad -= costoVia;
+
+        CiudadStorage.guardar(this.ciudad);
+    }
+
+    crearInstanciaEdificio(subtipo, x, y) {
+        const id = this.generarIdEdificio(subtipo);
+        const posicion = { x, y };
+
+        if (["casa", "apartamento"].includes(subtipo)) {
+            return new Residencial(id, subtipo, posicion);
+        }
+
+        if (["tienda", "centroComercial"].includes(subtipo)) {
+            return new Comercial(id, subtipo, posicion);
+        }
+
+        if (["fabrica", "granja"].includes(subtipo)) {
+            return new Industrial(id, subtipo, posicion);
+        }
+
+        if (["policia", "bomberos", "hospital"].includes(subtipo)) {
+            return new Servicio(id, subtipo, posicion);
+        }
+
+        if (["electrica", "agua"].includes(subtipo)) {
+            return new Planta(id, subtipo, posicion);
+        }
+
+        if (subtipo === "parque") {
+            return new Parque(id, posicion);
+        }
+
+        throw new Error(`Subtipo de edificio no soportado: ${subtipo}`);
+    }
+
+    generarIdEdificio(subtipo) {
+        return `${subtipo}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     }
 }

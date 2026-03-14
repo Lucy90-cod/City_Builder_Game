@@ -9,6 +9,31 @@ export default class ControladorTurno {
         this.controladorRecurso = new ControladorRecurso();
     }
 
+    calcularPuntuacion(ciudad) {
+        const dinero = ciudad.recursos?.dinero?.cantidad ?? 0;
+        const electricidad = ciudad.recursos?.electricidad?.cantidad ?? 0;
+        const agua = ciudad.recursos?.agua?.cantidad ?? 0;
+        const poblacion = ciudad.poblacion ?? 0;
+        const felicidad = ciudad.felicidadPromedio ?? 0;
+        const edificios = ciudad.edificios?.size ?? 0;
+
+        let puntuacion =
+            Math.floor(dinero / 100) +
+            (poblacion * 10) +
+            felicidad +
+            (edificios * 5);
+
+        if (electricidad < 0) {
+            puntuacion -= 100;
+        }
+
+        if (agua < 0) {
+            puntuacion -= 100;
+        }
+
+        return Math.max(0, Math.floor(puntuacion));
+    }
+
     iniciar() {
         if (this.temporizador) {
             return;
@@ -37,6 +62,7 @@ export default class ControladorTurno {
         this.controladorRecurso.procesarTurno(ciudad);
 
         ciudad.turnoActual += 1;
+        ciudad.puntuacion = this.calcularPuntuacion(ciudad);
 
         CiudadStorage.guardar(ciudad);
 
